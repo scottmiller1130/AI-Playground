@@ -1,0 +1,5 @@
+id,date,type,distance,duration,notes
+,2025-08-26,Run,8,80,[],hard workout
+,2025-08-25,Swim,.5,60,[],
+,2025-08-25,Strength,,,"[{""name"": ""Bench"", ""sets"": ""4"", ""reps"": ""8"", ""weight_lbs"": ""180"", ""notes"": """"}, {""name"": ""Squat"", ""sets"": ""4"", ""reps"": ""6"", ""weight_lbs"": ""180"", ""notes"": """"}]",
+,2025-08-26,Strength,,,"[{""name"": ""Bench"", ""sets"": ""4"", ""reps"": ""8"", ""weight_lbs"": ""200"", ""notes"": """"}, {""name"": ""Squat"", ""sets"": ""4"", ""reps"": ""6"", ""weight_lbs"": ""205"", ""notes"": """"}]",

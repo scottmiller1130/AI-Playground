@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block title %}Edit Workout{% endblock %}
+{% block content %}
+<div class="card mb-4">
+    <div class="card-body">
+        <h2 class="card-title">Edit Workout</h2>
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Date:
+                    <input class="form-control" type="date" name="date" value="{{ workout.date }}" required>
+                </label>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Type:
+                    <select class="form-select" name="type" id="type-select" required onchange="toggleStrengthFields()">
+                        <option value="Swim" {% if workout.type == 'Swim' %}selected{% endif %}>Swim</option>
+                        <option value="Bike" {% if workout.type == 'Bike' %}selected{% endif %}>Bike</option>
+                        <option value="Run" {% if workout.type == 'Run' %}selected{% endif %}>Run</option>
+                        <option value="Strength" {% if workout.type == 'Strength' %}selected{% endif %}>Strength</option>
+                        <option value="Hybrid" {% if workout.type == 'Hybrid' %}selected{% endif %}>Hybrid</option>
+                        <option value="Other" {% if workout.type == 'Other' %}selected{% endif %}>Other</option>
+                    </select>
+                </label>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Distance (miles):
+                    <input class="form-control" type="number" step="0.01" name="distance_miles" value="{{ workout.distance_miles }}">
+                </label>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Duration (min):
+                    <input class="form-control" type="number" step="1" name="duration" value="{{ workout.duration }}">
+                </label>
+            </div>
+            <div id="strength-fields" style="display:none;">
+                <label class="form-label">Exercises:</label>
+                <div id="exercises-list">
+                    {% for ex in workout.exercises %}
+                    <div class="card card-body mb-2">
+                        <div class="row g-2 align-items-end">
+                            <div class="col-md-3">
+                                <input class="form-control" name="exercise_name" placeholder="Exercise name" value="{{ ex.name }}" required>
+                            </div>
+                            <div class="col-md-2">
+                                <input class="form-control" name="sets" type="number" step="1" placeholder="Sets" value="{{ ex.sets }}">
+                            </div>
+                            <div class="col-md-2">
+                                <input class="form-control" name="reps" type="number" step="1" placeholder="Reps" value="{{ ex.reps }}">
+                            </div>
+                            <div class="col-md-2">
+                                <input class="form-control" name="weight_lbs" type="number" step="0.1" placeholder="Weight (lbs)" value="{{ ex.weight_lbs }}">
+                            </div>
+                            <div class="col-md-2">
+                                <input class="form-control" name="exercise_notes" placeholder="Notes" value="{{ ex.notes }}">
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="addExercise()">Add Exercise</button>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Notes:
+                    <input class="form-control" type="text" name="notes" value="{{ workout.notes }}">
+                </label>
+            </div>
+            <button class="btn btn-primary" type="submit">Save Changes</button>
+        </form>
+    </div>
+</div>
+<script>
+function toggleStrengthFields() {
+        var type = document.getElementById('type-select').value;
+        var strengthFields = document.getElementById('strength-fields');
+        if (type === 'Strength' || type === 'Hybrid') {
+                strengthFields.style.display = '';
+        } else {
+                strengthFields.style.display = 'none';
+        }
+}
+function addExercise() {
+        var exList = document.getElementById('exercises-list');
+        var div = document.createElement('div');
+        div.className = 'card card-body mb-2';
+        div.innerHTML = `
+            <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <input class="form-control" name="exercise_name" placeholder="Exercise name" required>
+                </div>
+                <div class="col-md-2">
+                    <input class="form-control" name="sets" type="number" step="1" placeholder="Sets">
+                </div>
+                <div class="col-md-2">
+                    <input class="form-control" name="reps" type="number" step="1" placeholder="Reps">
+                </div>
+                <div class="col-md-2">
+                    <input class="form-control" name="weight_lbs" type="number" step="0.1" placeholder="Weight (lbs)">
+                </div>
+                <div class="col-md-2">
+                    <input class="form-control" name="exercise_notes" placeholder="Notes">
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</button>
+                </div>
+            </div>
+        `;
+        exList.appendChild(div);
+}
+document.addEventListener('DOMContentLoaded', function() {
+        toggleStrengthFields();
+});
+</script>
+{% endblock %}
+{% endblock %}
+</html>

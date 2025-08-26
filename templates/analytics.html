@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Analytics</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    {% extends 'base.html' %}
+
+    {% block content %}
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                Workout Analytics
+            </div>
+            <div class="card-body">
+                <canvas id="analyticsChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Parse the analytics data passed from Flask
+        const analyticsData = JSON.parse('{{ analytics|tojson|safe }}');
+        const ctx = document.getElementById('analyticsChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: analyticsData.dates,
+                datasets: [{
+                    label: 'Max Weight Lifted',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    data: analyticsData.max_weights,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        type: 'category',
+                        display: true,
+                        scaleLabel: { display: true, labelString: 'Date' }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: { display: true, labelString: 'Weight (lbs)' }
+                    }]
+                }
+            }
+        });
+    </script>
+    {% endblock %}
+</body>
+</html>

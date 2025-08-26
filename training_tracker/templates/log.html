@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Workout Log{% endblock %}
+{% block content %}
+<div class="card mb-4">
+    <div class="card-body">
+        <h2 class="card-title">Workout Log</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Distance (miles)</th>
+                        <th>Duration (min)</th>
+                        <th>Exercises</th>
+                        <th>Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for w in workouts %}
+                    <tr>
+                        <td>{{ w.date }}</td>
+                        <td>{{ w.type }}</td>
+                        <td>{{ w.distance_miles }}</td>
+                        <td>{{ w.duration }}</td>
+                        <td>
+                            {% if w.type == 'Strength' or w.type == 'Hybrid' %}
+                                {% set exercises = w.exercises %}
+                                {% if exercises is string %}
+                                    {% set exercises = exercises | safe | loads %}
+                                {% endif %}
+                                <table class="table table-sm table-bordered mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Sets</th>
+                                            <th>Reps</th>
+                                            <th>Weight (lbs)</th>
+                                            <th>Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for ex in exercises %}
+                                        <tr>
+                                            <td>{{ ex.name }}</td>
+                                            <td>{{ ex.sets }}</td>
+                                            <td>{{ ex.reps }}</td>
+                                            <td>{{ ex.weight_lbs }}</td>
+                                            <td>{{ ex.notes }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                        </td>
+                        <td>{{ w.notes }}</td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" href="/edit/{{ loop.index0 }}">Edit</a>
+                            <a class="btn btn-sm btn-danger" href="/delete/{{ loop.index0 }}" onclick="return confirm('Are you sure you want to delete this workout?');">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
